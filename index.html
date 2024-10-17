@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スマホ対応 支払い情報フォーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        input[type="text"], input[type="date"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 1.2em;
+            }
+
+            form {
+                padding: 15px;
+            }
+
+            button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>支払い情報を入力してください</h1>
+
+    <form id="paymentForm">
+        <label for="customerNumber">お客様番号:</label>
+        <input type="text" id="customerNumber" name="customerNumber" required placeholder="12345678">
+
+        <label for="paymentDate">支払日:</label>
+        <input type="date" id="paymentDate" name="paymentDate" required>
+
+        <label for="bankName">支払い銀行名:</label>
+        <input type="text" id="bankName" name="bankName" required placeholder="銀行名を入力">
+
+        <button type="submit">送信</button>
+    </form>
+
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // ページリロードを防ぐ
+
+            const formData = {
+                customerNumber: document.getElementById('customerNumber').value,
+                paymentDate: document.getElementById('paymentDate').value,
+                bankName: document.getElementById('bankName').value
+            };
+
+            // サーバーへのデータ送信処理
+            fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Excelに保存しました: ' + data.message);
+            })
+            .catch(error => {
+                alert('エラーが発生しました');
+                console.error('エラー:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>
